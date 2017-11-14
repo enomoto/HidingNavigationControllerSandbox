@@ -9,17 +9,23 @@
 import UIKit
 
 class ViewController: UIViewController {
+    let NavigationHidingOffsetHeight: CGFloat = 44
+    var scrollBeginningPoint: CGPoint!
+}
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+extension ViewController: UIScrollViewDelegate {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        scrollBeginningPoint = scrollView.contentOffset
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard scrollBeginningPoint != nil else { return }
+
+        if scrollBeginningPoint.y < scrollView.contentOffset.y - NavigationHidingOffsetHeight {
+            navigationController?.setNavigationBarHidden(true, animated: true)
+        } else if scrollBeginningPoint.y > scrollView.contentOffset.y + NavigationHidingOffsetHeight {
+            navigationController?.setNavigationBarHidden(false, animated: true)
+        }
     }
-
-
 }
 
